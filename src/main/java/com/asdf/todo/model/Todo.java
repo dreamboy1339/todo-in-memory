@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+// 모델 클래스.
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
