@@ -67,6 +67,7 @@ spotless {
 	// Java 파일에 대한 포맷팅 설정을 추가합니다.
 	java {
 		// Google Java Format 적용.
+		// reflowLongStrings => + 연산자를 이용하여 읽기 좋게 변경함.
 		googleJavaFormat('1.22.0').aosp().reflowLongStrings()
 	}
 }
