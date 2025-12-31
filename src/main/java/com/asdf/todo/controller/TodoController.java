@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,5 +44,15 @@ public class TodoController {
         }
 
         return ResponseEntity.ok(todo);
+    }
+
+    @PostMapping
+    @Operation(summary = "작업 생성", description = "새로운 작업 생성")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "생성됨")
+    })
+    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo) {
+        Todo saved = todoService.save(todo);
+        return ResponseEntity.status(201).body(saved);
     }
 }
