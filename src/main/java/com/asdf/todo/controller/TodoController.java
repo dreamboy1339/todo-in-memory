@@ -23,7 +23,7 @@ public class TodoController {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "204", description = "내용 없음")
     })
-    public ResponseEntity<List<Todo>>  getAllTodos() {
+    public ResponseEntity<List<Todo>> getAllTodos() {
         List<Todo> todos = todoService.findAll();
         if (todos == null || todos.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -54,5 +54,24 @@ public class TodoController {
     public ResponseEntity<Todo> createTodo(@RequestBody Todo todo) {
         Todo saved = todoService.save(todo);
         return ResponseEntity.status(201).body(saved);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "작업 수정", description = "ID 로 작업 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "작업 없음")
+    })
+    public ResponseEntity<Todo> updateTodo(
+            @PathVariable Long id,
+            @RequestBody Todo todo
+    ) {
+        Todo existedTodo = todoService.findById(id);
+        if (existedTodo == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Todo updatedTodo = todoService.update(id, todo);
+        return ResponseEntity.ok(updatedTodo);
     }
 }
