@@ -74,4 +74,19 @@ public class TodoController {
         Todo updatedTodo = todoService.update(id, todo);
         return ResponseEntity.ok(updatedTodo);
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "작업 삭제", description = "ID 로 작업 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "내용 없음"),
+            @ApiResponse(responseCode = "404", description = "내용 없음")
+    })
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+        Todo todo = todoService.findById(id);
+        if (todo == null) {
+            return ResponseEntity.notFound().build();
+        }
+        todoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
