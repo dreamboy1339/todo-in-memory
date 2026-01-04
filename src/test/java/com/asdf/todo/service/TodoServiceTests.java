@@ -31,6 +31,7 @@ public class TodoServiceTests {
     @Test
     void testFindAll() throws Exception {
         List<Todo> todos = todoService.findAll();
+
         assertThat(todos).hasSize(2);
     }
 
@@ -38,6 +39,15 @@ public class TodoServiceTests {
     void testSaveTodo() throws Exception {
         Todo todo = new Todo(null, "New Todo", "New Description", false);
         todoService.save(todo);
+
         assertThat(todoService.findAll()).hasSize(3);
+    }
+
+    @Test
+    void testFindById() throws Exception {
+        Todo todo = todoService.findById(1L);
+
+        assertThat(todo).isNotNull();
+        assertThat(todo.getTitle()).isEqualTo("Test Todo 1");
     }
 }
