@@ -62,4 +62,11 @@ public class TodoServiceTests {
         assertThat(updatedTodo.getDescription()).isEqualTo("Updated Description");
         assertThat(todo.isCompleted()).isTrue();
     }
+
+    @Test
+    void testDeleteTodo() throws Exception {
+        todoService.delete(1L);
+        assertThat(todoService.findAll()).hasSize(1);
+        assertThat(todoService.findById(1L)).isNull();
+    }
 }
