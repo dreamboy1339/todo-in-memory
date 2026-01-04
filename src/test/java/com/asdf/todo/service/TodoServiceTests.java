@@ -54,12 +54,12 @@ public class TodoServiceTests {
 
     @Test
     void testUpdateTodo() throws Exception {
-        Todo updatedTodo = new Todo(1L, "Updated Todo", "Updated Description", false);
+        Todo updatedTodo = new Todo(1L, "Updated Todo", "Updated Description", true);
         todoService.update(1L, updatedTodo);
         Todo todo = todoService.findById(1L);
 
         assertThat(todo.getTitle()).isEqualTo("Updated Todo");
-        assertThat(updatedTodo.getDescription()).isEqualTo("Updated Description");
+        assertThat(todo.getDescription()).isEqualTo("Updated Description");
         assertThat(todo.isCompleted()).isTrue();
     }
 
