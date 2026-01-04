@@ -1,7 +1,3 @@
-HELP.md
-GUIDE.md
-EXPLAIN.md
-ARCHITECTURE.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
