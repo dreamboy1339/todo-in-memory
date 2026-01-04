@@ -13,8 +13,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,5 +61,22 @@ public class TodoControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].title").value("Test Todo"));
+    }
+
+    @Test
+    public void testCreateTodo() throws Exception {
+        Todo todo = new Todo();
+        todo.setId(1L);
+        todo.setTitle("New Todo");
+
+        given(todoService.save(any(Todo.class))).willReturn(todo);
+
+        mockMvc.perform(
+                        post("/api/todos/v1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{ \"title\": \"New Todo\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.title").value("New Todo"));
     }
 }
