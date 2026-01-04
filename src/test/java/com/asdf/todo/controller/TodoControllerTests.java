@@ -101,4 +101,16 @@ public class TodoControllerTests {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("Updated Todo"));
     }
+
+    @Test
+    public void testDeleteTodo() throws Exception {
+        Todo todo = new Todo();
+        todo.setId(1L);
+        todo.setTitle("Test Todo");
+
+        given(todoService.findById(1L)).willReturn(todo);
+
+        mockMvc.perform(delete("/api/todos/v1/1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
 }
