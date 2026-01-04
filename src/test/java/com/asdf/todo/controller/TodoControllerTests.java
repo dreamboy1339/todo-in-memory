@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -74,9 +74,31 @@ public class TodoControllerTests {
         mockMvc.perform(
                         post("/api/todos/v1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{ \"title\": \"New Todo\"}"))
+                                .content("{\"title\": \"New Todo\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("New Todo"));
+    }
+
+    @Test
+    public void testUpdateTodo() throws Exception {
+        Todo exitedTodo = new Todo();
+        exitedTodo.setId(1L);
+        exitedTodo.setTitle("Existing Todo");
+
+        Todo updatedTodo = new Todo();
+        updatedTodo.setId(1L);
+        updatedTodo.setTitle("Updated Todo");
+
+        given(todoService.findById(1L)).willReturn(exitedTodo);
+        given(todoService.update(anyLong(), any(Todo.class))).willReturn(updatedTodo);
+
+        mockMvc.perform(
+                        put("/api/todos/v1/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"title\": \"Updated Todo\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.title").value("Updated Todo"));
     }
 }
