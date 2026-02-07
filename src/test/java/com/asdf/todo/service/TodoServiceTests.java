@@ -14,8 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class TodoServiceTests {
 
-    @Autowired
-    private TodoService todoService;
+    @Autowired private TodoService todoService;
 
     @BeforeEach
     void setUp() {
@@ -25,8 +24,7 @@ public class TodoServiceTests {
     }
 
     @AfterEach
-    void tearDown() {
-    }
+    void tearDown() {}
 
     @Test
     void testFindAll() throws Exception {

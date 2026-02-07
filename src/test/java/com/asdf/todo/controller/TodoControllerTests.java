@@ -23,92 +23,89 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(TodoController.class)
 public class TodoControllerTests {
 
-        @Autowired
-        private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-        @MockitoBean
-        private TodoService todoService;
+    @MockitoBean private TodoService todoService;
 
-        @Test
-        public void testGetTodoById() throws Exception {
-                Todo todo = new Todo();
-                todo.setId(1L);
-                todo.setTitle("Test Todo");
+    @Test
+    public void testGetTodoById() throws Exception {
+        Todo todo = new Todo();
+        todo.setId(1L);
+        todo.setTitle("Test Todo");
 
-                given(todoService.findById(1L)).willReturn(todo);
+        given(todoService.findById(1L)).willReturn(todo);
 
-                mockMvc.perform(get("/api/todos/v1/1").accept(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.id").value(1L))
-                                .andExpect(jsonPath("$.title").value("Test Todo"));
-        }
+        mockMvc.perform(get("/api/todos/v1/1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.title").value("Test Todo"));
+    }
 
-        @Test
-        public void testGetAllTodos() throws Exception {
-                given(todoService.findAll()).willReturn(Collections.emptyList());
+    @Test
+    public void testGetAllTodos() throws Exception {
+        given(todoService.findAll()).willReturn(Collections.emptyList());
 
-                mockMvc.perform(get("/api/todos/v1").accept(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/todos/v1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
 
-                given(todoService.findAll())
-                                .willReturn(
-                                                Collections.singletonList(
-                                                                new Todo(1L, "Test Todo", "Description", false)));
+        given(todoService.findAll())
+                .willReturn(
+                        Collections.singletonList(new Todo(1L, "Test Todo", "Description", false)));
 
-                mockMvc.perform(get("/api/todos/v1").accept(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$[0].id").value(1L))
-                                .andExpect(jsonPath("$[0].title").value("Test Todo"));
-        }
+        mockMvc.perform(get("/api/todos/v1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].title").value("Test Todo"));
+    }
 
-        @Test
-        public void testCreateTodo() throws Exception {
-                Todo todo = new Todo();
-                todo.setId(1L);
-                todo.setTitle("New Todo");
+    @Test
+    public void testCreateTodo() throws Exception {
+        Todo todo = new Todo();
+        todo.setId(1L);
+        todo.setTitle("New Todo");
 
-                given(todoService.save(any(Todo.class))).willReturn(todo);
+        given(todoService.save(any(Todo.class))).willReturn(todo);
 
-                mockMvc.perform(
-                                post("/api/todos/v1")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content("{\"title\": \"New Todo\"}"))
-                                .andExpect(status().isCreated())
-                                .andExpect(jsonPath("$.id").value(1L))
-                                .andExpect(jsonPath("$.title").value("New Todo"));
-        }
+        mockMvc.perform(
+                        post("/api/todos/v1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"title\": \"New Todo\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.title").value("New Todo"));
+    }
 
-        @Test
-        public void testUpdateTodo() throws Exception {
-                Todo exitedTodo = new Todo();
-                exitedTodo.setId(1L);
-                exitedTodo.setTitle("Existing Todo");
+    @Test
+    public void testUpdateTodo() throws Exception {
+        Todo exitedTodo = new Todo();
+        exitedTodo.setId(1L);
+        exitedTodo.setTitle("Existing Todo");
 
-                Todo updatedTodo = new Todo();
-                updatedTodo.setId(1L);
-                updatedTodo.setTitle("Updated Todo");
+        Todo updatedTodo = new Todo();
+        updatedTodo.setId(1L);
+        updatedTodo.setTitle("Updated Todo");
 
-                given(todoService.findById(1L)).willReturn(exitedTodo);
-                given(todoService.update(anyLong(), any(Todo.class))).willReturn(updatedTodo);
+        given(todoService.findById(1L)).willReturn(exitedTodo);
+        given(todoService.update(anyLong(), any(Todo.class))).willReturn(updatedTodo);
 
-                mockMvc.perform(
-                                put("/api/todos/v1/1")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content("{\"title\": \"Updated Todo\"}"))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.id").value(1L))
-                                .andExpect(jsonPath("$.title").value("Updated Todo"));
-        }
+        mockMvc.perform(
+                        put("/api/todos/v1/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"title\": \"Updated Todo\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.title").value("Updated Todo"));
+    }
 
-        @Test
-        public void testDeleteTodo() throws Exception {
-                Todo todo = new Todo();
-                todo.setId(1L);
-                todo.setTitle("Test Todo");
+    @Test
+    public void testDeleteTodo() throws Exception {
+        Todo todo = new Todo();
+        todo.setId(1L);
+        todo.setTitle("Test Todo");
 
-                given(todoService.findById(1L)).willReturn(todo);
+        given(todoService.findById(1L)).willReturn(todo);
 
-                mockMvc.perform(delete("/api/todos/v1/1").accept(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isNoContent());
-        }
+        mockMvc.perform(delete("/api/todos/v1/1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
 }
